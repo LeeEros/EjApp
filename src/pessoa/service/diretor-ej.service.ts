@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDiretorEjDto } from '../dto/create-diretor-ej.dto';
-import { UpdateDiretorEjDto } from '../dto/update-diretor-ej.dto';
+import { CreateDiretorEjDto } from '../dto/create/create-diretor-ej.dto';
+import { UpdateDiretorEjDto } from '../dto/update/update-diretor-ej.dto';
 
 @Injectable()
 export class DiretorEjService {
