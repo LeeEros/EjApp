@@ -1,1 +1,8 @@
-export class Pessoa {}
+export class Pessoa {
+  id: number;
+  CPF: string;
+  nomeCompleto: string;
+  dataNascimento: Date;
+  email: string;
+  senha: String;
+}

@@ -16,7 +16,7 @@ export class EjController {
   constructor(private readonly ejService: EjService) {}
 
   @Post()
-  create(@Body() createEjDto: CreateEjDto) {
+  async create(@Body() createEjDto: CreateEjDto) {
     return this.ejService.create(createEjDto);
   }
 
