@@ -3,7 +3,7 @@ import { AppController } from '../controller/app.controller';
 import { AppService } from '../service/app.service';
 import { PessoaModule } from 'src/pessoa/module/pessoa.module';
 import { EjModule } from 'src/ej/ej.module';
-import { ProjetoModule } from 'src/projeto/projeto.module';
+import { ProjetoModule } from 'src/projeto/module/projeto.module';
 
 @Module({
   imports: [PessoaModule, EjModule, ProjetoModule],
