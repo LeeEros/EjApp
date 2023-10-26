@@ -11,12 +11,12 @@ import { CreatePessoaDto } from '../dto/create/create-pessoa.dto';
 import { UpdatePessoaDto } from '../dto/update/update-pessoa.dto';
 import { PessoaService } from '../service/pessoa.service';
 
-@Controller('pessoa')
+@Controller('/pessoa')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
 
   @Post()
-  create(@Body() createPessoaDto: CreatePessoaDto) {
+  async create(@Body() createPessoaDto: CreatePessoaDto) {
     return this.pessoaService.create(createPessoaDto);
   }
 
