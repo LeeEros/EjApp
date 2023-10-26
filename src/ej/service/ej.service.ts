@@ -5,7 +5,7 @@ import { UpdateEjDto } from '../dto/update-ej.dto';
 @Injectable()
 export class EjService {
   create(createEjDto: CreateEjDto) {
-    return 'This action adds a new ej';
+    return createEjDto;
   }
 
   findAll() {

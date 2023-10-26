@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { EjService } from '../service/ej.service';
 import { CreateEjDto } from '../dto/create-ej.dto';
@@ -17,16 +18,20 @@ export class EjController {
 
   @Post()
   async create(@Body() createEjDto: CreateEjDto) {
-    return this.ejService.create(createEjDto);
+    try {
+      return this.ejService.create(createEjDto);
+    } catch (err) {
+      throw new NotFoundException(err);
+    }
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.ejService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.ejService.findOne(+id);
   }
 
