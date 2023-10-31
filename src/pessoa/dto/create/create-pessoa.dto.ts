@@ -3,7 +3,6 @@ import {
   IsDate,
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsString,
   IsStrongPassword,
   MinLength,
@@ -12,8 +11,8 @@ import {
 export class CreatePessoaDto {
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  id: number;
+  @IsString()
+  id: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -27,8 +26,7 @@ export class CreatePessoaDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsDate()
-  dataNascimento: Date;
+  dataNascimento: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -39,5 +37,5 @@ export class CreatePessoaDto {
   @IsNotEmpty()
   @MinLength(6, { message: 'A senha precisa ter pelo menos 6 caracteres' })
   @IsStrongPassword()
-  senha: String;
+  senha: string;
 }
