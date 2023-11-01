@@ -13,6 +13,10 @@ export class PessoaRepository {
     return this.pessoa;
   }
 
+  findOneById(id: string): Pessoa {
+    return this.buscaId(id);
+  }
+
   private buscaId(id: string) {
     const possivelPessoa = this.pessoa.find(
       (pessoaSalva) => pessoaSalva.id === id,
@@ -25,27 +29,23 @@ export class PessoaRepository {
     return possivelPessoa;
   }
 
-  /* async atualiza(id: string, pessoaAtualizada: Partial<Pessoa>) {
+  async atualiza(id: string, dadosAtualizacao: Partial<Pessoa>) {
     const pessoa = this.buscaId(id);
-    Object.entries(pessoaAtualizada).forEach(([chave, valor]) => {
+    Object.entries(dadosAtualizacao).forEach(([chave, valor]) => {
       if (chave === 'id') {
         return;
       }
-
       pessoa[chave] = valor;
     });
 
     return pessoa;
-  }*/
+  }
 
-  async atualiza(id: string, dadosAtualizacao: Partial<Pessoa>) {
-    const usuario = this.buscaId(id);
-    Object.entries(dadosAtualizacao).forEach(([chave, valor]) => {
-      if (chave === 'id') {
-        usuario[chave] = valor;
-      }
-    });
+  async remove(id: string) {
+    const pessoa = this.buscaId(id);
 
-    return usuario;
+    this.pessoa = this.pessoa.filter((pessoaSalva) => pessoaSalva.id !== id);
+
+    return;
   }
 }

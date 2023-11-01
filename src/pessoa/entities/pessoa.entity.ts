@@ -10,4 +10,6 @@ export class Pessoa {
   email: string;
 
   senha: string;
+
+  [key: string]: any;
 }

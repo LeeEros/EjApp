@@ -6,7 +6,7 @@ export class MembroEj extends Pessoa {
   matriculaInstituicao: string;
 
   @Column()
-  dataFiliacao: Date;
+  dataFiliacao: string;
 
   @Column()
   enderecoResidencial: string;

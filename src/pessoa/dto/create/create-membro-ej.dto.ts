@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { Pessoa } from 'src/pessoa/entities/pessoa.entity';
 
-export class CreateMembroEjDto {
+export class CreateMembroEjDto extends Pessoa {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -9,8 +10,8 @@ export class CreateMembroEjDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsDate()
-  dataFiliacao: Date;
+  @IsString()
+  dataFiliacao: string;
 
   @ApiProperty()
   @IsNotEmpty()

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -19,15 +20,15 @@ export class PessoaController {
   constructor(private pessoaRepository: PessoaRepository) {}
 
   @Post()
-  async create(@Body() createPessoaDto: CreatePessoaDto) {
+  async create(@Body() pessoa: CreatePessoaDto) {
     try {
       const pessoaEntity = new Pessoa();
       pessoaEntity.id = uuid();
-      pessoaEntity.CPF = createPessoaDto.CPF;
-      pessoaEntity.nomeCompleto = createPessoaDto.nomeCompleto;
-      pessoaEntity.dataNascimento = createPessoaDto.dataNascimento;
-      pessoaEntity.email = createPessoaDto.email;
-      pessoaEntity.senha = createPessoaDto.senha;
+      pessoaEntity.CPF = pessoa.CPF;
+      pessoaEntity.nomeCompleto = pessoa.nomeCompleto;
+      pessoaEntity.dataNascimento = pessoa.dataNascimento;
+      pessoaEntity.email = pessoa.email;
+      pessoaEntity.senha = pessoa.senha;
 
       this.pessoaRepository.salvar(pessoaEntity);
 
@@ -47,19 +48,22 @@ export class PessoaController {
 
   @Get()
   async findAll() {
-    const pessoaSalvos = await this.pessoaRepository.listar();
-    const pessoaLista = pessoaSalvos.map(
-      (pessoa) =>
-        new listaPessoaDto(
-          pessoa.id,
-          pessoa.CPF,
-          pessoa.dataNascimento,
-          pessoa.email,
-          pessoa.nomeCompleto,
-        ),
-    );
-
-    return pessoaLista;
+    try {
+      const pessoaSalvos = await this.pessoaRepository.listar();
+      const pessoaLista = pessoaSalvos.map(
+        (pessoa) =>
+          new listaPessoaDto(
+            pessoa.id,
+            pessoa.CPF,
+            pessoa.dataNascimento,
+            pessoa.email,
+            pessoa.nomeCompleto,
+          ),
+      );
+      return pessoaLista;
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
   @Put('/:id')
@@ -78,22 +82,32 @@ export class PessoaController {
         nomeCompleto: pessoaAtualizada.nomeCompleto,
         dataNascimento: pessoaAtualizada.dataNascimento,
         email: pessoaAtualizada.email,
+        messagem: 'Usuário atualizado com sucesso',
       };
     } catch {
       throw new NotFoundException('Usuário não encontrado');
     }
   }
 
-  /*
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.pessoaRepository.findOne(+id);
+    try {
+      return this.pessoaRepository.findOneById(id);
+    } catch {
+      throw new NotFoundException('Usuário não encontrado');
+    }
   }
 
-
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pessoaRepository.remove(+id);
-  }*/
+  @Delete('/:id')
+  async removeUsuario(@Param('id') id: string) {
+    try {
+      const pessoaRepository = await this.pessoaRepository.remove(id);
+      return {
+        usuario: pessoaRepository,
+        messagem: 'Usuário removido com sucesso',
+      };
+    } catch {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+  }
 }
