@@ -5,6 +5,7 @@ export class listaMembroEjDto {
     readonly dataNascimento: string,
     readonly nomeCompleto: string,
     readonly email: string,
+    readonly senha: string,
     readonly matriculaInstituicao: string,
     readonly dataFiliacao: string,
     readonly enderecoResidencial: string,

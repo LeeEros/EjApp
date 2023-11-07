@@ -22,6 +22,12 @@ export class MembroEjController {
   async create(@Body() membro: CreateMembroEjDto) {
     try {
       const membroEjEntity = new MembroEj();
+      membroEjEntity.id = membro.id;
+      membroEjEntity.CPF = membro.CPF;  
+      membroEjEntity.nomeCompleto = membro.nomeCompleto;
+      membroEjEntity.dataNascimento = membro.dataNascimento;
+      membroEjEntity.email = membro.email;
+      membroEjEntity.senha =  membro.senha;
       membroEjEntity.matriculaInstituicao = membro.matriculaInstituicao;
       membroEjEntity.dataFiliacao = membro.dataFiliacao;
       membroEjEntity.enderecoResidencial = membro.enderecoResidencial;
@@ -31,6 +37,12 @@ export class MembroEjController {
 
       return {
         membro: new listaMembroEjDto(
+          membroEjEntity.id,
+          membroEjEntity.CPF,
+          membroEjEntity.nomeCompleto,
+          membroEjEntity.dataNascimento,
+          membroEjEntity.email,
+          membroEjEntity.senha,
           membroEjEntity.matriculaInstituicao,
           membroEjEntity.dataFiliacao,
           membroEjEntity.enderecoResidencial,
@@ -44,13 +56,14 @@ export class MembroEjController {
 
   @Get()
   findAll() {
-    return this.membroEjService.findAll();
+    return this.membroRepository.listar();
   }
 
+  /*
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.membroEjService.findOne(+id);
-  }
+    return this.membroRepository.findOne(+id);
+  } 
 
   @Patch(':id')
   update(
@@ -63,5 +76,5 @@ export class MembroEjController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.membroEjService.remove(+id);
-  }
+  } */
 }
