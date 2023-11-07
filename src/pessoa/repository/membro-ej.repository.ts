@@ -1,4 +1,8 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { MembroEj } from '../entities/membro-ej.entity';
 import { Pessoa } from '../entities/pessoa.entity';
 import { PessoaRepository } from './pessoa.repository';
@@ -8,54 +12,78 @@ export class MembroEjRepository {
   private membro: MembroEj[] = [];
 
   salvar(membro: MembroEj) {
-    this.membro.push(membro);
+    try {
+      this.membro.push(membro);
+    } catch {
+      throw new NotFoundException(`Não foi possível salvar`);
+    }
   }
 
   async listar() {
-    return this.membro;
+    try {
+      return this.membro;
+    } catch {
+      throw new NotFoundException(`Não foi possível listar`);
+    }
   }
 
-  findOneById(id: string): MembroEj {
-    const possivelMembro = this.buscaRG(id);
-    if (!possivelMembro) {
-      throw new Error(`Membro with ID ${id} not found`);
+  findOneById(RG: string): MembroEj {
+    try {
+      const possivelMembro = this.buscaRG(RG);
+      if (!possivelMembro) {
+        throw new Error(`Membro with ID ${RG} not found`);
+      }
+      return possivelMembro;
+    } catch {
+      throw new NotFoundException(`Não foi possível encontrar`);
     }
-    return possivelMembro;
   }
 
   private buscaRG(RG: string) {
-    const possivelMembro = this.membro.find(
-      (membroSalvo) => membroSalvo.RG === RG,
-    );
-    return possivelMembro;
+    try {
+      const possivelMembro = this.membro.find(
+        (membroSalvo) => membroSalvo.RG === RG,
+      );
+      return possivelMembro;
+    } catch {
+      throw new NotFoundException(`Não foi possível buscar`);
+    }
   }
 
   async atualiza(RG: string, dadosAtualizacao: Partial<MembroEj>) {
-    const membro = this.buscaRG(RG);
+    try {
+      const membro = this.buscaRG(RG);
 
-    if (!membro) {
-      throw new Error(`Membro with RG ${RG} not found`);
+      if (!membro) {
+        throw new Error(`Membro with RG ${RG} not found`);
+      }
+
+      Object.entries(dadosAtualizacao).forEach(([chave, valor]) => {
+        if (chave === 'RG') {
+          return;
+        }
+        if (chave in membro) {
+          membro[chave] = valor;
+        } else {
+          throw new NotAcceptableException();
+        }
+      });
+
+      return membro;
+    } catch {
+      throw new NotFoundException(`Não foi possível atualizar`);
     }
-
-    Object.entries(dadosAtualizacao).forEach(([chave, valor]) => {
-      if (chave === 'RG') {
-        return;
-      }
-      if (chave in membro) {
-        membro[chave] = valor;
-      } else {
-        throw new NotAcceptableException();
-      }
-    });
-
-    return membro;
   }
 
   async remove(RG: string) {
-    const membro = this.buscaRG(RG);
+    try {
+      const membro = this.buscaRG(RG);
 
-    this.membro = this.membro.filter((membroSalvo) => membroSalvo.RG !== RG);
+      this.membro = this.membro.filter((membroSalvo) => membroSalvo.RG !== RG);
 
-    return;
+      return;
+    } catch {
+      throw new NotFoundException(`Não foi possível excluir`);
+    }
   }
 }

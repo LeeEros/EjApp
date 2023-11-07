@@ -1,12 +1,15 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
-
 export class Ej {
-  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
-  id: number;
+  id: string;
 
-  @Column({ length: 14 })
   CNPJ: string;
 
-  @Column({ length: 200 })
   nome: string;
+
+  [key: string]: any;
+
+  constructor(data?: Partial<Ej>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 }

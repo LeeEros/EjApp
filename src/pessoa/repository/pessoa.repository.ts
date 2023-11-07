@@ -1,55 +1,79 @@
-import { Injectable } from '@nestjs/common';
+import { Catch, Injectable, NotFoundException } from '@nestjs/common';
 import { Pessoa } from '../entities/pessoa.entity';
 
 @Injectable()
 export class PessoaRepository {
   private pessoa: Pessoa[] = [];
 
-  salvar(pessoa: Pessoa) {
-    this.pessoa.push(pessoa);
+  async salvar(pessoa: Pessoa) {
+    try {
+      this.pessoa.push(pessoa);
+    } catch {
+      throw new NotFoundException(`Não foi possível salvar`);
+    }
   }
 
   async listar() {
-    return this.pessoa;
+    try {
+      return this.pessoa;
+    } catch {
+      throw new NotFoundException(`Não foi possível listar`);
+    }
   }
 
-  findOneById(id: string): Pessoa {
-    const possivelPessoa = this.buscaId(id);
-    if (!possivelPessoa) {
-      throw new Error(`Membro with ID ${id} not found`);
+  async findOneById(id: string): Promise<Pessoa> {
+    try {
+      const possivelPessoa = this.buscaId(id);
+      if (!possivelPessoa) {
+        throw new Error(`Não foi possível encontrar`);
+      }
+      return await possivelPessoa;
+    } catch {
+      throw new NotFoundException(`Não foi possível salvar`);
     }
-    return possivelPessoa;
   }
 
   private buscaId(id: string) {
-    const possivelPessoa = this.pessoa.find(
-      (pessoaSalva) => pessoaSalva.id === id,
-    );
+    try {
+      const possivelPessoa = this.pessoa.find(
+        (pessoaSalva) => pessoaSalva.id === id,
+      );
 
-    if (!possivelPessoa) {
-      throw new Error('Usuário não encontrado');
+      if (!possivelPessoa) {
+        throw new Error('Usuário não encontrado');
+      }
+
+      return possivelPessoa;
+    } catch {
+      throw new NotFoundException(`Não foi possível encontrar`);
     }
-
-    return possivelPessoa;
   }
 
   async atualiza(id: string, dadosAtualizacao: Partial<Pessoa>) {
-    const pessoa = this.buscaId(id);
-    Object.entries(dadosAtualizacao).forEach(([chave, valor]) => {
-      if (chave === 'id') {
-        return;
-      }
-      pessoa[chave] = valor;
-    });
+    try {
+      const pessoa = this.buscaId(id);
+      Object.entries(dadosAtualizacao).forEach(([chave, valor]) => {
+        if (chave === 'id') {
+          return;
+        }
+        pessoa[chave] = valor;
+      });
 
-    return pessoa;
+      return pessoa;
+    } catch {
+      throw new NotFoundException(`Não foi possível atualizar`);
+    }
   }
 
   async remove(id: string) {
-    const pessoa = this.buscaId(id);
+    try {
+      const pessoa = this.buscaId(id);
 
-    this.pessoa = this.pessoa.filter((pessoaSalva) => pessoaSalva.id !== id);
+      this.pessoa = this.pessoa.filter((pessoaSalva) => pessoaSalva.id !== id);
 
-    return;
+      return;
+    } catch {
+      throw new NotFoundException(`Não foi possível excluir`);
+    }
   }
 }

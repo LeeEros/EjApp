@@ -1,47 +1,90 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   NotFoundException,
+  Delete,
+  Get,
+  Param,
+  Put,
 } from '@nestjs/common';
-import { EjService } from '../service/ej.service';
-import { CreateEjDto } from '../dto/create-ej.dto';
+import { v4 as uuid } from 'uuid';
+import { Ej } from '../entities/ej.entity';
+import { EjRepository } from '../repository/ej.repository';
+import { listaEjDto } from '../dto/listaEjDto';
 import { UpdateEjDto } from '../dto/update-ej.dto';
+import { CreateEjDto } from '../dto/create-ej.dto';
 
 @Controller('ej')
 export class EjController {
-  constructor(private readonly ejService: EjService) {}
+  constructor(private readonly ejRepository: EjRepository) {}
 
   @Post()
   async create(@Body() createEjDto: CreateEjDto) {
     try {
-      return this.ejService.create(createEjDto);
-    } catch (err) {
-      throw new NotFoundException(err);
+      const ejEntity = new Ej({
+        id: uuid(),
+        CNPJ: createEjDto.CNPJ,
+        nome: createEjDto.nome,
+      });
+
+      this.ejRepository.salvar(ejEntity);
+
+      return {
+        ej: new listaEjDto(ejEntity.id, ejEntity.CNPJ, ejEntity.nome),
+      };
+    } catch {
+      throw new NotFoundException();
     }
   }
 
   @Get()
   async findAll() {
-    return this.ejService.findAll();
+    try {
+      const pessoaSalvos = await this.ejRepository.listar();
+      const pessoaLista = pessoaSalvos.map(
+        (Ej) => new listaEjDto(Ej.id, Ej.CNPJ, Ej.nome),
+      );
+      return pessoaLista;
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.ejService.findOne(+id);
+    try {
+      return this.ejRepository.findOneById(id);
+    } catch {
+      throw new NotFoundException('Ej não encontrada');
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEjDto: UpdateEjDto) {
-    return this.ejService.update(+id, updateEjDto);
+  @Put('/:id')
+  async update(@Param('id') id: string, @Body() updateEjDto: UpdateEjDto) {
+    try {
+      const EjAtualizada = await this.ejRepository.atualiza(id, updateEjDto);
+
+      return {
+        CNPJ: EjAtualizada.CNPJ,
+        nome: EjAtualizada.nome,
+        messagem: 'Ej atualizada com sucesso',
+      };
+    } catch {
+      throw new NotFoundException('Ej não encontrada');
+    }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ejService.remove(+id);
+  @Delete('/:id')
+  async removeEj(@Param('id') id: string) {
+    try {
+      const EjRepository = await this.ejRepository.remove(id);
+      return {
+        usuario: EjRepository,
+        messagem: 'Ej removida com sucesso',
+      };
+    } catch {
+      throw new NotFoundException('Ej não encontrada');
+    }
   }
 }
