@@ -14,7 +14,11 @@ export class PessoaRepository {
   }
 
   findOneById(id: string): Pessoa {
-    return this.buscaId(id);
+    const possivelPessoa = this.buscaId(id);
+    if (!possivelPessoa) {
+      throw new Error(`Membro with ID ${id} not found`);
+    }
+    return possivelPessoa;
   }
 
   private buscaId(id: string) {

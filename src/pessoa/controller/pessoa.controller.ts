@@ -66,6 +66,15 @@ export class PessoaController {
     }
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    try {
+      return this.pessoaRepository.findOneById(id);
+    } catch {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+  }
+
   @Put('/:id')
   async update(
     @Param('id') id: string,
@@ -84,15 +93,6 @@ export class PessoaController {
         email: pessoaAtualizada.email,
         messagem: 'Usuário atualizado com sucesso',
       };
-    } catch {
-      throw new NotFoundException('Usuário não encontrado');
-    }
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    try {
-      return this.pessoaRepository.findOneById(id);
     } catch {
       throw new NotFoundException('Usuário não encontrado');
     }
