@@ -1,21 +1,15 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
-
 export class Projeto {
-  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
-  id: number;
+  id: string;
 
-  @Column()
-  dataInicio: Date;
+  dataInicio: string;
 
-  @Column()
-  dataPrevisao: Date;
+  dataPrevisao: string;
 
-  @Column()
-  dataFim: Date;
+  dataFim: string;
 
-  @Column()
   nomeProjeto: string;
 
-  @Column()
   status: string;
+
+  [key: string]: any;
 }

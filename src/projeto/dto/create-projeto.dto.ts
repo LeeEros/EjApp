@@ -4,26 +4,26 @@ import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 export class CreateProjetoDto {
   @ApiProperty()
   @IsNotEmpty({ message: 'Data não pode ser vazia' })
-  @IsDate()
-  dataInicio: Date;
+  @IsString()
+  dataInicio: string;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'Data não pode ser vazia' })
-  @IsDate()
-  dataPrevisao: Date;
+  @IsString()
+  dataPrevisao: string;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'Data não pode ser vazia' })
-  @IsDate()
-  dataFim: Date;
+  @IsString()
+  dataFim: string;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'Projeto não pode ser vazia' })
   @IsString()
-  nomeProjeto: String;
+  nomeProjeto: string;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'Status não pode ser vazia' })
   @IsString()
-  status: String;
+  status: string;
 }
