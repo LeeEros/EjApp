@@ -6,8 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('EJ  example')
-    .setDescription('The EJ API description')
+    .setTitle('Aplicação EJ')
+    .setDescription('Aplicativo das EJs')
     .setVersion('1.0')
     .addTag('EJ')
     .build();

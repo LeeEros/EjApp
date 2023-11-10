@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { Pessoa } from 'src/pessoa/entities/pessoa.entity';
 
-export class CreateClienteDto {
+export class CreateClienteDto extends Pessoa {
   @ApiProperty()
   @IsNotEmpty({ message: 'CNPJ não pode ser vazio' })
   @IsString()
@@ -14,6 +15,6 @@ export class CreateClienteDto {
 
   @ApiProperty()
   @IsNotEmpty({ message: 'contrato não pode ser vazio' })
-  @IsBoolean()
-  contratoAtivo: boolean;
+  @IsString()
+  contratoAtivo: string;
 }

@@ -4,14 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { MembroEj } from '../entities/membro-ej.entity';
-import { Pessoa } from '../entities/pessoa.entity';
-import { PessoaRepository } from './pessoa.repository';
 
 @Injectable()
 export class MembroEjRepository {
   private membro: MembroEj[] = [];
 
-  salvar(membro: MembroEj) {
+  async salvar(membro: MembroEj) {
     try {
       this.membro.push(membro);
     } catch {

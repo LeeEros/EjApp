@@ -1,4 +1,3 @@
-import { Column } from 'typeorm';
 import { Pessoa } from './pessoa.entity';
 
 export class MembroEj extends Pessoa {
