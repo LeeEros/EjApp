@@ -45,7 +45,7 @@ export class PessoaRepository {
 
       return possivelPessoa;
     } catch {
-      throw new NotFoundException(`Não foi possível encontrar`);
+      throw new NotFoundException(`Usuário não encontrado`);
     }
   }
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateDiretorEjDto {
   @ApiProperty()
@@ -9,6 +9,6 @@ export class CreateDiretorEjDto {
 
   @ApiProperty()
   @IsNotEmpty({ message: 'Não pode ser vazio' })
-  @IsBoolean()
+  @IsString()
   conselheiroFederacao: string;
 }
